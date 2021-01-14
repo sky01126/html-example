@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+<head>
+    <title>JQuery: Dynamically add new rows to a table based on a hidden template</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet" />
+    <style type="text/css">
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+            <div class="container">
+                <h3 class="col-lg-9">JQuery: 숨겨진 템플릿을 기반으로 테이블에 새 행을 동적 추가</h3>
+            </div>
+        </header>
+        <div class="container">
+            <button class="btn btn-primary" id="item-add">추가</button>
+            <button class="btn btn-warning" id="item-del">삭제</button>
+            <p />
+            <form class="form" action="#">
+                <table class="table" id="myTable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Surname</th>
+                            <th>Age</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr id="template" style="display: none">
+                            <td><input type="text" class="form-control" placeholder="First Name" name="name" /></td>
+                            <td><input type="text" class="form-control" placeholder="Surname" name="surname" /></td>
+                            <td><input type="text" class="form-control" placeholder="Age" name="age" /></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script>
+        let row = 0;
+
+        let rename = function(rowId, name, id) {
+            $('#' + rowId).find('input[name="' + name + '"]').attr('id', id);
+            $('#' + rowId).find('input[name="' + name + '"]').attr('name', id);
+        }
+
+        let add = function() {
+            if ((row + 1) > 10) return;
+            let rowId = 'row' + row;
+            let template = $('#template')
+                .clone()                        // CLONE THE TEMPLATE
+                .attr('id', rowId)    // MAKE THE ID UNIQUE
+                .appendTo($('#myTable tbody'))  // APPEND TO THE TABLE
+                .show();                        // SHOW IT
+
+            rename(rowId, 'name', 'name[' + row + ']');
+            rename(rowId, 'surname', 'surname[' + row + ']');
+            rename(rowId, 'age', 'age[' + row + ']');
+
+            console.log('add row number:', row);
+            row = row + 1;
+        };
+
+        $(function() {
+            $('#item-add').click(function(e) {
+                e.preventDefault();
+                add();
+            });
+
+            $('#item-del').click(function(e) {
+                e.preventDefault();
+                if ((row - 1) < 1) return;
+                row = row - 1;
+                let rowId = 'row' + row;
+
+                $('#row' + row).remove();
+                console.log('del row number:', row);
+
+            });
+        });
+
+        $(document).ready(function() {
+            console.log('init...');
+            add();
+        });
+    </script>
+</body>
+</html>
