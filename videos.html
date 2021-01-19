@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://vjs.zencdn.net/7.10.2/video-js.css" rel="stylesheet" />
+    <title>Document</title>
+</head>
+<body>
+    <!-- <video id="my-video" class="video-js" preload="auto" width="640" height="264" poster="//vjs.zencdn.net/v/oceans.png" data-setup="{}" controls loop="loop"> -->
+    <video id="my-video" class="video-js" preload="auto" width="640" height="360" poster="//vjs.zencdn.net/v/oceans.png" data-setup="{}" loop="loop">
+        <!-- <source src="//vjs.zencdn.net/v/oceans.mp4" type="video/mp4" /> -->
+        <source src="http://127.0.0.1:5500/videos/turntable.mp4" type="video/mp4" />
+        <p class="vjs-no-js">
+            To view this video please enable JavaScript, and consider upgrading to a
+            web browser that
+            <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+        </p>
+    </video>
+    <br />
+    <button class="btn btn-primary" id="video-start">START</button>
+    <button class="btn btn-dark" id="video-stop">STOP</button>
+
+    <!-- <video id="preview-player_html5_api" preload="auto" crossorigin="anonymous" class="vjs-tech" playsinline="playsinline" tabindex="-1" role="application" poster="//vjs.zencdn.net/v/oceans.png" src="//vjs.zencdn.net/v/oceans.mp4" loop="loop"></video> -->
+    <script src="https://vjs.zencdn.net/7.10.2/video.min.js"></script>
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script>
+        let myPlayer = videojs('my-video');
+
+        let isPaused = myPlayer.paused();
+        let isPlaying = !myPlayer.paused();
+
+        $(function() {
+            $('#video-start').click(function(e) {
+                e.preventDefault();
+                myPlayer.play();
+            });
+
+            $('#video-stop').click(function(e) {
+                console.log('isPaused:', isPaused, ', isPlaying:', isPlaying);
+                e.preventDefault();
+                myPlayer.pause();
+            });
+        });
+
+        myPlayer.on("play", function(e) {
+            e.preventDefault(); //NOT WORKING, ONLY AN EXAMPLE
+
+            console.log('video-on-play');
+
+            var whereYouAt = this.currentTime();
+            console.log('1. currentTime:', whereYouAt);
+        });
+
+        myPlayer.on("pause", function(e) {
+            e.preventDefault(); //NOT WORKING, ONLY AN EXAMPLE
+            console.log('video--pause');
+
+            var whereYouAt = this.currentTime();
+            console.log('1. currentTime:', whereYouAt);
+
+            this.currentTime(0); // 2 minutes into the video
+            this.hasStarted(false); // 포스터 이미지 보여주기.
+
+            whereYouAt = this.currentTime();
+            console.log('2. currentTime:', whereYouAt);
+        });
+
+// https://github.com/videojs/video.js/issues/2661
+
+// https://stackoverflow.com/questions/27022730/video-js-display-poster-image-at-end-of-video
+// $(document).ready(function()
+// {
+//     // 'videoplayer' is the ID of our <video> tag
+//     videojs("my-video", {}, function()
+//     {
+//         video_player = this;
+
+//         video_player.on('ended', function()
+//         {
+//             video_player.posterImage.show();
+//             $(this.posterImage.contentEl()).show();
+//             $(this.bigPlayButton.contentEl()).show();
+//             video_player.currentTime(0);
+//             video_player.controlBar.hide();
+//             video_player.bigPlayButton.show();
+//             video_player.cancelFullScreen();
+//         });
+
+//         video_player.on('play', function()
+//         {
+//             video_player.posterImage.hide();
+//             video_player.controlBar.show();
+//             video_player.bigPlayButton.hide();
+//         });
+//     });
+// });
+    </script>
+</body>
+</html>
