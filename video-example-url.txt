@@ -1,0 +1,6 @@
+- 샘플
+  https://github.com/video-dev/hls.js/
+  https://codepen.io/dotdreaming/pen/CnLeD
+
+- 유료 버전
+  https://www.nuevodevel.com/nuevo/playlist

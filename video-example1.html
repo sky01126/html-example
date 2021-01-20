@@ -25,7 +25,7 @@
                 </div>
                 <div id="div-my-video">
                     <!-- <video id="my-video" class="video-js" preload="auto" width="640" height="264" poster="//vjs.zencdn.net/v/oceans.png" data-setup="{}" controls loop="loop" muted> -->
-                    <video id="my-video" class="video-js vjs-default-skin" preload="auto" width="640" height="360" poster="//vjs.zencdn.net/v/oceans.png">
+                    <video id="my-video" class="video-js" preload="auto" width="640" height="360" poster="//vjs.zencdn.net/v/oceans.png">
                         <source src="//vjs.zencdn.net/v/oceans.mp4" type="video/mp4" />
                         <!-- <source src="http://127.0.0.1:5500/videos/turntable.mp4" type="video/mp4" /> -->
                         <!-- <source src="https://d2zihajmogu5jn.cloudfront.net/bipbop-advanced/bipbop_16x9_variant.m3u8" type="application/x-mpegURL"> -->
@@ -38,14 +38,16 @@
     <script src="https://code.jquery.com/jquery.js"></script>
     <script src="https://vjs.zencdn.net/7.10.2/video.min.js"></script>
     <script>
-        // https://github.com/video-dev/hls.js/
-
         let player = videojs('my-video', {
             autoplay: true,
             controls: true,     // 플레이어 컨트롤러.
             loop: 'loop',
             preload: 'auto',
             muted: true,        // 음소거.
+        });
+
+        player.nuevo({
+            option: option_value
         });
 
         let isPaused = player.paused();
