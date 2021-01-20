@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://vjs.zencdn.net/7.10.2/video-js.css" rel="stylesheet" />
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <div>
+            <header>
+                <div class="container">
+                    <h3 class="col-lg-9">마우스 포커스 시 플레이</h3>
+                </div>
+            </header>
+            <div class="container">
+                <div>
+                    <button class="btn btn-primary" id="video-start">START</button>
+                    <button class="btn btn-dark" id="video-stop">STOP</button>
+                </div>
+                <div>
+                    <br />
+                </div>
+                <div id="div-my-video">
+                    <!--
+                        controls : 플레이어 컨트롤러.
+                        muted : 음소거.
+                    -->
+                    <!-- <video id="my-video" class="video-js" preload="auto" width="640" height="264" poster="//vjs.zencdn.net/v/oceans.png" data-setup="{}" controls loop="loop" muted> -->
+                    <video id="my-video" class="video-js vjs-default-skin" preload="auto" width="640" height="360" poster="//vjs.zencdn.net/v/oceans.png">
+                        <source src="//vjs.zencdn.net/v/oceans.mp4" type="video/mp4" />
+                        <!-- <source src="http://127.0.0.1:5500/videos/turntable.mp4" type="video/mp4" /> -->
+                        <!-- <source src="https://d2zihajmogu5jn.cloudfront.net/bipbop-advanced/bipbop_16x9_variant.m3u8" type="application/x-mpegURL"> -->
+                    </video>
+                </div>
+                <!-- <video id="preview-player_html5_api" preload="auto" crossorigin="anonymous" class="vjs-tech" playsinline="playsinline" tabindex="-1" role="application" poster="//vjs.zencdn.net/v/oceans.png" src="//vjs.zencdn.net/v/oceans.mp4" loop="loop"></video> -->
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="https://vjs.zencdn.net/7.10.2/video.min.js"></script>
+    <script>
+        // https://github.com/video-dev/hls.js/
+
+        let player = videojs('my-video', {
+            autoplay: false,
+            controls: false,        // 플레이어 컨트롤러.
+            loop: 'loop',
+            preload: 'auto',
+            muted: true,            // 음소거.
+        }, function onPlayerReady() {
+            videojs.log('Your player is ready!');
+
+            // In this context, `this` is the player that was created by Video.js.
+            this.play();
+
+            // How about an event listener?
+            this.on('pause', function() {
+                videojs.log('Awww...over so soon?!');
+                this.currentTime(0); // 0 minutes into the video
+            });
+        });
+
+        let isPaused = player.paused();
+        let isPlaying = !player.paused();
+
+        $(function() {
+            $('#video-start').click(function(e) {
+                e.preventDefault();
+                player.play();
+            });
+
+            $('#video-stop').click(function(e) {
+                console.log('isPaused:', isPaused, ', isPlaying:', isPlaying);
+                e.preventDefault();
+                player.pause();
+            });
+        });
+    </script>
+</body>
+</html>

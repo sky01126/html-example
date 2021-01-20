@@ -19,45 +19,68 @@
                 <div>
                     <button class="btn btn-primary" id="video-start">START</button>
                     <button class="btn btn-dark" id="video-stop">STOP</button>
-                    <p />
-                    <!-- <video id="my-video" class="video-js" preload="auto" width="640" height="264" poster="//vjs.zencdn.net/v/oceans.png" data-setup="{}" controls loop="loop"> -->
-                    <video id="my-video" class="video-js" preload="auto" width="640" height="360"
-                        poster="//vjs.zencdn.net/v/oceans.png" data-setup="{}" loop="loop">
-                        <!-- <source src="//vjs.zencdn.net/v/oceans.mp4" type="video/mp4" /> -->
-                        <source src="http://127.0.0.1:5500/videos/turntable.mp4" type="video/mp4" />
-                        <!-- <p class="vjs-no-js">
-                            To view this video please enable JavaScript, and consider upgrading to a
-                            web browser that
-                            <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-                        </p> -->
+                </div>
+                <div>
+                    <br />
+                </div>
+                <div id="div-my-video">
+                    <!-- <video id="my-video" class="video-js" preload="auto" width="640" height="264" poster="//vjs.zencdn.net/v/oceans.png" data-setup="{}" controls loop="loop" muted> -->
+                    <video id="my-video" class="video-js vjs-default-skin" preload="auto" width="640" height="360" poster="//vjs.zencdn.net/v/oceans.png">
+                        <source src="//vjs.zencdn.net/v/oceans.mp4" type="video/mp4" />
+                        <!-- <source src="http://127.0.0.1:5500/videos/turntable.mp4" type="video/mp4" /> -->
+                        <!-- <source src="https://d2zihajmogu5jn.cloudfront.net/bipbop-advanced/bipbop_16x9_variant.m3u8" type="application/x-mpegURL"> -->
                     </video>
                 </div>
                 <!-- <video id="preview-player_html5_api" preload="auto" crossorigin="anonymous" class="vjs-tech" playsinline="playsinline" tabindex="-1" role="application" poster="//vjs.zencdn.net/v/oceans.png" src="//vjs.zencdn.net/v/oceans.mp4" loop="loop"></video> -->
             </div>
         </div>
     </div>
-    <script src="https://vjs.zencdn.net/7.10.2/video.min.js"></script>
     <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="https://vjs.zencdn.net/7.10.2/video.min.js"></script>
     <script>
-        let myPlayer = videojs('my-video');
+        // https://github.com/video-dev/hls.js/
 
-        let isPaused = myPlayer.paused();
-        let isPlaying = !myPlayer.paused();
+        let player = videojs('my-video', {
+            autoplay: true,
+            controls: true,     // 플레이어 컨트롤러.
+            loop: 'loop',
+            preload: 'auto',
+            muted: true,        // 음소거.
+        });
+
+        let isPaused = player.paused();
+        let isPlaying = !player.paused();
 
         $(function() {
             $('#video-start').click(function(e) {
                 e.preventDefault();
-                myPlayer.play();
+                player.play();
             });
 
             $('#video-stop').click(function(e) {
                 console.log('isPaused:', isPaused, ', isPlaying:', isPlaying);
                 e.preventDefault();
-                myPlayer.pause();
+                player.pause();
+            });
+
+            // div에 마우스 포커스가 올라가면 플레이 / 마우스가 빠져가가면
+            $('#div-my-video').mouseover(function() {
+                var playPromise = player.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(_ => {
+                        // Automatic playback started!
+                        // Show playing UI.
+                    }).catch(error => {
+                        // Auto-play was prevented
+                        // Show paused UI.
+                    });
+                }
+            }).mouseout(function() {
+                player.pause();
             });
         });
 
-        myPlayer.on("play", function(e) {
+        player.on("play", function(e) {
             e.preventDefault(); //NOT WORKING, ONLY AN EXAMPLE
 
             console.log('video-on-play');
@@ -66,7 +89,7 @@
             console.log('1. currentTime:', whereYouAt);
         });
 
-        myPlayer.on("pause", function(e) {
+        player.on("pause", function(e) {
             e.preventDefault(); //NOT WORKING, ONLY AN EXAMPLE
             console.log('video--pause');
 
