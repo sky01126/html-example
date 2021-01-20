@@ -15,7 +15,7 @@
         </header>
         <div class="container">
             <button class="btn btn-primary" id="item-add">추가</button>
-            <button class="btn btn-warning" id="item-del">삭제</button>
+            <button class="btn btn-dark" id="item-del">삭제</button>
             <p />
             <form class="form" action="#">
                 <table class="table" id="myTable">
@@ -37,13 +37,15 @@
             </form>
         </div>
     </div>
-    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="https://code.jquery.com/jquery.js"></script>
     <script>
         let row = 0;
 
         let rename = function(rowId, name, id) {
-            $('#' + rowId).find('input[name="' + name + '"]').attr('id', id);
-            $('#' + rowId).find('input[name="' + name + '"]').attr('name', id);
+            // $('#' + rowId).find('input[name="' + name + '"]').attr('id', id);
+            // $('#' + rowId).find('input[name="' + name + '"]').attr('name', id);
+            $('#' + rowId).find('[name="' + name + '"]').attr('id', id);
+            $('#' + rowId).find('[name="' + name + '"]').attr('name', id);
         }
 
         let add = function() {
@@ -59,6 +61,7 @@
             rename(rowId, 'surname', 'surname[' + row + ']');
             rename(rowId, 'age', 'age[' + row + ']');
 
+            console.log('template:', template);
             console.log('add row number:', row);
             row = row + 1;
         };
